@@ -9,7 +9,7 @@ import (
 
 func GetPosts(w http.ResponseWriter, r *http.Request) {
 	db := dbConnection.DB
-	rows, err := db.Query("select * from post")
+	rows, err := db.Query("select * from post where IsDeleted = 0")
 	if err != nil {
 		panic(err.Error())
 	}
