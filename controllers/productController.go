@@ -49,3 +49,21 @@ func GetOneProduct(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(products)
 }
+
+func AddProduct(w http.ResponseWriter, r *http.Request) {
+	if r.Body == nil {
+		json.NewEncoder(w).Encode("Поля ввода не заполнены")
+	}
+	productName := r.FormValue("product_name")
+
+	//Валидатор
+
+	err := db.QueryRow("CALL Product_Insert($1)", productName)
+	if err != nil {
+		panic(err)
+	}
+	json.NewEncoder(w).Encode("Товар добавлен")
+}
+func UpdateProduct(w http.ResponseWriter, r *http.Request) {
+
+}
