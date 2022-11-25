@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 	"storeAPI/controllers"
 	"storeAPI/dbConnection"
@@ -8,7 +10,14 @@ import (
 
 func main() {
 	dbConnection.DBConnect()
-	http.Handle("/api", controllers.ValidateJWT(controllers.GetPosts))
-	http.HandleFunc("/jwt", controllers.GetJWT)
-	http.ListenAndServe("localhost:4000", nil)
+	r := mux.NewRouter()
+	r.Handle("/api", controllers.ValidateJWT(controllers.GetPosts))
+	r.HandleFunc("/jwt", controllers.GetJWT)
+	r.HandleFunc("/posts", controllers.GetPosts)
+	r.HandleFunc("/products", controllers.GetAllProducts).Methods("GET")
+	r.HandleFunc("/products/add", controllers.AddProduct).Methods("POST")
+	r.HandleFunc("/products/edit/{id}", controllers.UpdateProduct).Methods("POST")
+	r.HandleFunc("/products/{id}", controllers.GetOneProduct).Methods("GET")
+	r.HandleFunc("/products/delete/{id}", controllers.DeleteProduct).Methods("GET")
+	log.Fatal(http.ListenAndServe("localhost:4000", r))
 }
