@@ -85,5 +85,14 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteProduct(w http.ResponseWriter, r *http.Request) {
-
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		json.NewEncoder(w).Encode("Некорректный запрос")
+	}
+	e := db.QueryRow("CALL Product_Delete($1)", id)
+	if e != nil {
+		panic(e)
+	}
+	json.NewEncoder(w).Encode("Товар удален")
 }
