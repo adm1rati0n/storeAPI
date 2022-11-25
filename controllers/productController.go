@@ -68,14 +68,22 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	idProduct := r.FormValue("id_product")
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		json.NewEncoder(w).Encode("Некорректный запрос")
+	}
 	productName := r.FormValue("product_name")
 
 	//Валидатор
 
-	err := db.QueryRow("CALL Product_Update($1,$2)", idProduct, productName)
-	if err != nil {
-		panic(err)
+	e := db.QueryRow("CALL Product_Update($1,$2)", id, productName)
+	if e != nil {
+		panic(e)
 	}
 	json.NewEncoder(w).Encode("Товар изменен")
+}
+
+func DeleteProduct(w http.ResponseWriter, r *http.Request) {
+
 }
