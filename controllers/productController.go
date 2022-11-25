@@ -65,5 +65,17 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("Товар добавлен")
 }
 func UpdateProduct(w http.ResponseWriter, r *http.Request) {
+	if r.Body == nil {
+		json.NewEncoder(w).Encode("Поля ввода не заполнены")
+	}
+	idProduct := r.FormValue("id_product")
+	productName := r.FormValue("product_name")
 
+	//Валидатор
+
+	err := db.QueryRow("CALL Product_Update($1,$2)", idProduct, productName)
+	if err != nil {
+		panic(err)
+	}
+	json.NewEncoder(w).Encode("Товар изменен")
 }
