@@ -12,16 +12,16 @@ import (
 
 func GetAllProducts(w http.ResponseWriter, r *http.Request) {
 	db := dbConnection.DB
-	rows, err := db.Query("select * from product where IsDeleted = 0")
+	rows, err := db.Query("select * from `product` where IsDeleted = 0")
 	if err != nil {
-		panic(err.Error())
+		panic(err)
 	}
 	var products []models.Product
 	for rows.Next() {
 		var product models.Product
 		err = rows.Scan(&product.IDProduct, &product.ProductName, &product.IsDeleted)
 		if err != nil {
-			panic(err.Error())
+			panic(err)
 		}
 		products = append(products, product)
 	}
@@ -33,7 +33,7 @@ func GetOneProduct(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		json.NewEncoder(w).Encode("Некорректный запрос")
+		panic(err)
 	}
 
 	var product models.Product
@@ -55,7 +55,7 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 	query := "call Product_Insert(?)"
 	res, err := db.ExecContext(context.Background(), query, productName)
 	if err != nil {
-		json.NewEncoder(w).Encode(err)
+		panic(err)
 	}
 	json.NewEncoder(w).Encode(res)
 }
@@ -67,7 +67,7 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		json.NewEncoder(w).Encode("Некорректный запрос")
+		panic(err)
 	}
 	productName := r.FormValue("product_name")
 
@@ -76,7 +76,7 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	query := "call Product_Update(?,?)"
 	res, err := db.ExecContext(context.Background(), query, id, productName)
 	if err != nil {
-		json.NewEncoder(w).Encode(err)
+		panic(err)
 	}
 	json.NewEncoder(w).Encode(res)
 }
@@ -86,12 +86,12 @@ func DeleteProduct(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		json.NewEncoder(w).Encode("Некорректный запрос")
+		panic(err)
 	}
 	query := "call Product_Delete(?)"
 	res, err := db.ExecContext(context.Background(), query, id)
 	if err != nil {
-		json.NewEncoder(w).Encode(err)
+		panic(err)
 	}
 	json.NewEncoder(w).Encode(res)
 }

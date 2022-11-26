@@ -14,14 +14,14 @@ func GetAllAgencies(w http.ResponseWriter, r *http.Request) {
 	db := dbConnection.DB
 	rows, err := db.Query("select * from `agency` where IsDeleted = 0")
 	if err != nil {
-		panic(err.Error())
+		panic(err)
 	}
 	var agencies []models.Agency
 	for rows.Next() {
 		var agency models.Agency
 		err = rows.Scan(&agency.IDAgency, &agency.AgencyName, &agency.IsDeleted)
 		if err != nil {
-			panic(err.Error())
+			panic(err)
 		}
 		agencies = append(agencies, agency)
 	}
@@ -33,13 +33,13 @@ func GetOneAgency(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		json.NewEncoder(w).Encode("Некорректный запрос")
+		panic(err)
 	}
 
 	var agency models.Agency
 
 	if err := db.QueryRow("select * from `agency` where IsDeleted = 0 and ID_Agency = ?", id).Scan(&agency.IDAgency, &agency.AgencyName, &agency.IsDeleted); err != nil {
-		json.NewEncoder(w).Encode(err)
+		panic(err)
 	}
 	json.NewEncoder(w).Encode(agency)
 }
@@ -55,7 +55,7 @@ func AddAgency(w http.ResponseWriter, r *http.Request) {
 	query := "call Agency_Insert(?)"
 	res, err := db.ExecContext(context.Background(), query, agencyName)
 	if err != nil {
-		json.NewEncoder(w).Encode(err)
+		panic(err)
 	}
 	json.NewEncoder(w).Encode(res)
 }
@@ -68,7 +68,7 @@ func UpdateAgency(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		json.NewEncoder(w).Encode("Некорректный запрос")
+		panic(err)
 	}
 	agencyName := r.FormValue("agency_name")
 
@@ -77,7 +77,7 @@ func UpdateAgency(w http.ResponseWriter, r *http.Request) {
 	query := "call Agency_Update(?,?)"
 	res, err := db.ExecContext(context.Background(), query, id, agencyName)
 	if err != nil {
-		json.NewEncoder(w).Encode(err)
+		panic(err)
 	}
 	json.NewEncoder(w).Encode(res)
 }
@@ -87,12 +87,12 @@ func DeleteAgency(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		json.NewEncoder(w).Encode("Некорректный запрос")
+		panic(err)
 	}
 	query := "call Agency_Delete(?)"
 	res, err := db.ExecContext(context.Background(), query, id)
 	if err != nil {
-		json.NewEncoder(w).Encode(err)
+		panic(err)
 	}
 	json.NewEncoder(w).Encode(res)
 }
