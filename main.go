@@ -11,9 +11,8 @@ import (
 func main() {
 	dbConnection.DBConnect()
 	r := mux.NewRouter()
-	r.Handle("/api", controllers.ValidateJWT(controllers.GetPosts))
-	r.HandleFunc("/jwt", controllers.GetJWT)
-	r.HandleFunc("/posts", controllers.GetPosts)
+	//r.Handle("/api", controllers.ValidateJWT(controllers.GetPosts))
+	//r.HandleFunc("/jwt", controllers.GetJWT)
 
 	//Товары
 	r.HandleFunc("/products", controllers.GetAllProducts).Methods("GET")
@@ -30,6 +29,13 @@ func main() {
 	r.HandleFunc("/agencies/delete/{id}", controllers.DeleteAgency).Methods("GET")
 
 	//Поставщики
+	r.HandleFunc("/suppliers", controllers.GetAllSuppliers).Methods("GET")
+	r.HandleFunc("/suppliers/add", controllers.AddSupplier).Methods("POST")
+	r.HandleFunc("/suppliers/edit/{id}", controllers.UpdateSupplier).Methods("POST")
+	r.HandleFunc("/suppliers/{id}", controllers.GetOneSupplier).Methods("GET")
+	r.HandleFunc("/suppliers/delete/{id}", controllers.DeleteSupplier).Methods("GET")
 
+	//Должности
+	r.HandleFunc("/posts", controllers.GetAllPosts).Methods("GET")
 	log.Fatal(http.ListenAndServe("localhost:4000", r))
 }
