@@ -39,7 +39,7 @@ func GetOnePost(w http.ResponseWriter, r *http.Request) {
 
 	var post models.Post
 
-	if err := db.QueryRow("select * from post where IsDeleted = 0 and ID_Post = ?", id).Scan(&post.IDPost, &post.PostName, &post.IsDeleted); err != nil {
+	if err := db.QueryRow("select * from `post` where IsDeleted = 0 and ID_Post = ?", id).Scan(&post.IDPost, &post.PostName, &post.IsDeleted); err != nil {
 		panic(err)
 	}
 	json.NewEncoder(w).Encode(post)

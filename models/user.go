@@ -6,4 +6,5 @@ type User struct {
 	Password     string   `json:"password"`
 	UserRole     Role     `json:"user_role"`
 	UserEmployee Employee `json:"user_employee"`
+	IsDeleted    bool     `json:"is_deleted"`
 }

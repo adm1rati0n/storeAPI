@@ -26,15 +26,18 @@ func (claims Claims) Valid() error {
 	return fmt.Errorf("Token is invalid")
 }
 
-func HashPassword(password string) (string, error) {
+func HashPassword(password string) string {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
+	if err != nil {
+		panic(err)
+	}
+	return string(bytes)
 }
 
-func CheckPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
-}
+//func CheckPasswordHash(password, hash string) bool {
+//	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+//	return err == nil
+//}
 
 func GenerateJWT() (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)

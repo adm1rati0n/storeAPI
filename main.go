@@ -37,5 +37,16 @@ func main() {
 
 	//Должности
 	r.HandleFunc("/posts", controllers.GetAllPosts).Methods("GET")
+	r.HandleFunc("/posts/add", controllers.AddPost).Methods("POST")
+	r.HandleFunc("/posts/edit/{id}", controllers.UpdatePost).Methods("POST")
+	r.HandleFunc("/posts/{id}", controllers.GetOnePost).Methods("GET")
+	r.HandleFunc("/posts/delete/{id}", controllers.DeletePost).Methods("GET")
+
+	//Пользователи
+	r.HandleFunc("/users", controllers.GetAllUsers).Methods("GET")
+	r.HandleFunc("/users/add", controllers.AddUser).Methods("POST")
+	r.HandleFunc("/users/edit/{id}", controllers.UpdateUser).Methods("POST")
+	r.HandleFunc("/users/{id}", controllers.GetOneUser).Methods("GET")
+	r.HandleFunc("/users/delete/{id}", controllers.DeleteUser).Methods("GET")
 	log.Fatal(http.ListenAndServe("localhost:4000", r))
 }
