@@ -39,7 +39,7 @@ func GetOneUser(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 
 	if err := db.QueryRow("select * from `user` where IsDeleted = 0 and ID_Product = ?", id).Scan(&user.IDUser, &user.Login, &user.Password, &user.UserEmployee, &user.UserRole, &user.IsDeleted); err != nil {
-		json.NewEncoder(w).Encode(err)
+		panic(err)
 	}
 	json.NewEncoder(w).Encode(user)
 }

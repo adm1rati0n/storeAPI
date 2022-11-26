@@ -39,7 +39,7 @@ func GetOneProduct(w http.ResponseWriter, r *http.Request) {
 	var product models.Product
 
 	if err := db.QueryRow("select * from `product` where IsDeleted = 0 and ID_Product = ?", id).Scan(&product.IDProduct, &product.ProductName, &product.IsDeleted); err != nil {
-		json.NewEncoder(w).Encode(err)
+		panic(err)
 	}
 	json.NewEncoder(w).Encode(product)
 }
