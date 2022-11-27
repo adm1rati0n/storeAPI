@@ -49,7 +49,7 @@ func GetOneCheque(w http.ResponseWriter, r *http.Request) {
 	var cheque models.Cheque
 	var chequeView models.ChequeViewModel
 
-	if err := db.QueryRow("select * from `cheque` where IsDeleted = 0 and ID_Sale = ?", id).Scan(
+	if err := db.QueryRow("select * from `cheque` where IsDeleted = 0 and ID_Cheque = ?", id).Scan(
 		&cheque.IDCheque, &cheque.ChequeDate, &cheque.Total,
 		&cheque.Employee, &cheque.IsDeleted); err != nil {
 		panic(err)
@@ -70,7 +70,7 @@ func AddCheque(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
 	date := r.FormValue("cheque_date")
-	employeeID := r.FormValue("employee")
+	employeeID := r.FormValue("cheque_employee")
 
 	//Валидатор
 

@@ -29,18 +29,12 @@ func GetAllSuppliers(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetOneSupplier(w http.ResponseWriter, r *http.Request) {
-	db := dbConnection.DB
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		panic(err)
 	}
-
-	var supplier models.Supplier
-
-	if err := db.QueryRow("select * from `supplier` where IsDeleted = 0 and ID_Supplier = ?", id).Scan(&supplier.IDSupplier, &supplier.SupplierName, &supplier.IsDeleted); err != nil {
-		panic(err)
-	}
+	supplier := GetSupplier(id)
 	json.NewEncoder(w).Encode(supplier)
 }
 

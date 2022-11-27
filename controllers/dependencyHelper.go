@@ -80,3 +80,41 @@ func GetSales(id int) []models.SaleViewModel {
 	}
 	return sales
 }
+
+func GetPurchases(id int) []models.PurchaseViewModel {
+	db := dbConnection.DB
+	rows, err := db.Query("select * from `purchase` where IsDeleted = 0 and Supply_ID = ?", id)
+	if err != nil {
+		panic(err)
+	}
+	var purchases []models.PurchaseViewModel
+	for rows.Next() {
+		var purchase models.Purchase
+		var purchaseView models.PurchaseViewModel
+		err = rows.Scan(&purchase.IDPurchase, &purchase.PurchaseAmount, &purchase.PurchasePrice,
+			&purchase.Product, &purchase.Supply, &purchase.IsDeleted)
+		if err != nil {
+			panic(err)
+		}
+
+		purchaseView.IDPurchase = purchase.IDPurchase
+		purchaseView.PurchaseAmount = purchase.PurchaseAmount
+		purchaseView.PurchasePrice = purchase.PurchasePrice
+		purchaseView.IsDeleted = purchase.IsDeleted
+		purchaseView.Supply = purchase.Supply
+		purchaseView.Product = GetProduct(purchase.Product)
+
+		purchases = append(purchases, purchaseView)
+	}
+	return purchases
+}
+
+func GetSupplier(id int) models.Supplier {
+	db := dbConnection.DB
+	var supplier models.Supplier
+
+	if err := db.QueryRow("select * from `supplier` where IsDeleted = 0 and ID_Supplier = ?", id).Scan(&supplier.IDSupplier, &supplier.SupplierName, &supplier.IsDeleted); err != nil {
+		panic(err)
+	}
+	return supplier
+}
