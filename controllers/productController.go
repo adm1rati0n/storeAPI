@@ -29,18 +29,14 @@ func GetAllProducts(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetOneProduct(w http.ResponseWriter, r *http.Request) {
-	db := dbConnection.DB
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		panic(err)
 	}
 
-	var product models.Product
+	product := GetProduct(id)
 
-	if err := db.QueryRow("select * from `product` where IsDeleted = 0 and ID_Product = ?", id).Scan(&product.IDProduct, &product.ProductName, &product.IsDeleted); err != nil {
-		panic(err)
-	}
 	json.NewEncoder(w).Encode(product)
 }
 

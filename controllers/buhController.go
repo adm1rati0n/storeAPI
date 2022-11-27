@@ -24,7 +24,6 @@ func GetAllBuh(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		employee := GetOneEmployee(buh.Employee)
 		buhView.IDBuh = buh.IDBuh
 		buhView.StartingDate = buh.StartingDate
 		buhView.EndingDate = buh.EndingDate
@@ -33,7 +32,7 @@ func GetAllBuh(w http.ResponseWriter, r *http.Request) {
 		buhView.Taxes = buh.Taxes
 		buhView.Profit = buh.Profit
 		buhView.IsDeleted = buh.IsDeleted
-		buhView.Employee = employee
+		buhView.Employee = GetOneEmployee(buh.Employee)
 
 		buhs = append(buhs, buhView)
 	}
@@ -56,7 +55,6 @@ func GetOneBuh(w http.ResponseWriter, r *http.Request) {
 		&buh.Employee, &buh.IsDeleted); err != nil {
 		panic(err)
 	}
-	employee := GetOneEmployee(buh.Employee)
 	buhView.IDBuh = buh.IDBuh
 	buhView.StartingDate = buh.StartingDate
 	buhView.EndingDate = buh.EndingDate
@@ -65,7 +63,7 @@ func GetOneBuh(w http.ResponseWriter, r *http.Request) {
 	buhView.Taxes = buh.Taxes
 	buhView.Profit = buh.Profit
 	buhView.IsDeleted = buh.IsDeleted
-	buhView.Employee = employee
+	buhView.Employee = GetOneEmployee(buh.Employee)
 	json.NewEncoder(w).Encode(buhView)
 }
 

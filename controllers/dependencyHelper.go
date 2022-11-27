@@ -42,3 +42,13 @@ func GetPost(id int) models.Post {
 	}
 	return post
 }
+
+func GetProduct(id int) models.Product {
+	db := dbConnection.DB
+	var product models.Product
+
+	if err := db.QueryRow("select * from `product` where IsDeleted = 0 and ID_Product = ?", id).Scan(&product.IDProduct, &product.ProductName, &product.IsDeleted); err != nil {
+		panic(err)
+	}
+	return product
+}

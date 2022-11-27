@@ -69,5 +69,19 @@ func main() {
 	r.HandleFunc("/employees/edit/{id}", controllers.UpdateEmployee).Methods("POST")
 	r.HandleFunc("/employees/{id}", controllers.GetEmployee).Methods("GET")
 	r.HandleFunc("/employees/delete/{id}", controllers.DeleteEmployee).Methods("GET")
+
+	//Закупка
+	r.HandleFunc("/purchase", controllers.GetAllPurchases).Methods("GET")
+	r.HandleFunc("/purchase/add", controllers.AddPurchase).Methods("POST")
+	r.HandleFunc("/purchase/edit/{id}", controllers.UpdatePurchase).Methods("POST")
+	r.HandleFunc("/purchase/{id}", controllers.GetOnePurchase).Methods("GET")
+	r.HandleFunc("/purchase/delete/{id}", controllers.DeletePurchase).Methods("GET")
+
+	//Продажа
+	r.HandleFunc("/sales", controllers.GetAllSales).Methods("GET")
+	r.HandleFunc("/sales/add", controllers.AddSale).Methods("POST")
+	r.HandleFunc("/sales/edit/{id}", controllers.UpdateSale).Methods("POST")
+	r.HandleFunc("/sales/{id}", controllers.GetOneSale).Methods("GET")
+	r.HandleFunc("/sales/delete/{id}", controllers.DeleteSale).Methods("GET")
 	log.Fatal(http.ListenAndServe("localhost:4000", r))
 }

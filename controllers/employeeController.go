@@ -25,7 +25,7 @@ func GetAllEmployees(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		post := GetPost(employee.Post)
+
 		employeeView.IDEmployee = employee.IDEmployee
 		employeeView.EmployeeSurname = employee.EmployeeSurname
 		employeeView.EmployeeName = employee.EmployeeName
@@ -33,7 +33,7 @@ func GetAllEmployees(w http.ResponseWriter, r *http.Request) {
 		employeeView.EmployeePassportSeries = employee.EmployeePassportSeries
 		employeeView.EmployeePassportNumber = employee.EmployeePassportNumber
 		employeeView.IsDeleted = employee.IsDeleted
-		employeeView.Post = post
+		employeeView.Post = GetPost(employee.Post)
 
 		employees = append(employees, employeeView)
 	}
@@ -58,7 +58,6 @@ func GetEmployee(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	post := GetPost(employee.Post)
 	employeeView.IDEmployee = employee.IDEmployee
 	employeeView.EmployeeSurname = employee.EmployeeSurname
 	employeeView.EmployeeName = employee.EmployeeName
@@ -66,7 +65,7 @@ func GetEmployee(w http.ResponseWriter, r *http.Request) {
 	employeeView.EmployeePassportSeries = employee.EmployeePassportSeries
 	employeeView.EmployeePassportNumber = employee.EmployeePassportNumber
 	employeeView.IsDeleted = employee.IsDeleted
-	employeeView.Post = post
+	employeeView.Post = GetPost(employee.Post)
 	json.NewEncoder(w).Encode(employeeView)
 }
 

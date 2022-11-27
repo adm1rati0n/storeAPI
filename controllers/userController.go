@@ -24,14 +24,12 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		role := GetOneRole(user.Role)
-		employee := GetOneEmployee(user.Employee)
 		userView.IDUser = user.IDUser
 		userView.Login = user.Login
 		userView.Password = user.Password
 		userView.IsDeleted = user.IsDeleted
-		userView.Role = role
-		userView.Employee = employee
+		userView.Role = GetOneRole(user.Role)
+		userView.Employee = GetOneEmployee(user.Employee)
 
 		users = append(users, userView)
 	}
@@ -52,14 +50,12 @@ func GetOneUser(w http.ResponseWriter, r *http.Request) {
 	if err := db.QueryRow("select * from `user` where IsDeleted = 0 and ID_User = ?", id).Scan(&user.IDUser, &user.Login, &user.Password, &user.Employee, &user.Role, &user.IsDeleted); err != nil {
 		panic(err)
 	}
-	role := GetOneRole(user.Role)
-	employee := GetOneEmployee(user.Employee)
 	userView.IDUser = user.IDUser
 	userView.Login = user.Login
 	userView.Password = user.Password
 	userView.IsDeleted = user.IsDeleted
-	userView.Role = role
-	userView.Employee = employee
+	userView.Role = GetOneRole(user.Role)
+	userView.Employee = GetOneEmployee(user.Employee)
 	json.NewEncoder(w).Encode(userView)
 }
 
