@@ -16,14 +16,27 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	var users []models.User
+	//var users []models.User
+	var users []models.UserView
 	for rows.Next() {
 		var user models.User
-		err = rows.Scan(&user.IDUser, &user.Login, &user.Password, &user.UserEmployee, &user.UserRole, &user.IsDeleted)
+		var userView models.UserView
+		err = rows.Scan(&user.IDUser, &user.Login, &user.Password, &user.Employee, &user.Role, &user.IsDeleted)
 		if err != nil {
 			panic(err)
 		}
-		users = append(users, user)
+		role := GetOneRole(user.Role)
+		employee := GetOneEmployee(user.Employee)
+		userView.IDUser = user.IDUser
+		userView.Login = user.Login
+		userView.Password = user.Password
+		userView.IsDeleted = user.IsDeleted
+		userView.Role = role
+		userView.Employee = employee
+
+		//users = append(users, userView)
+
+		users = append(users, userView)
 	}
 	json.NewEncoder(w).Encode(users)
 }
@@ -37,11 +50,20 @@ func GetOneUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user models.User
+	var userView models.UserView
 
-	if err := db.QueryRow("select * from `user` where IsDeleted = 0 and ID_Product = ?", id).Scan(&user.IDUser, &user.Login, &user.Password, &user.UserEmployee, &user.UserRole, &user.IsDeleted); err != nil {
+	if err := db.QueryRow("select * from `user` where IsDeleted = 0 and ID_User = ?", id).Scan(&user.IDUser, &user.Login, &user.Password, &user.Employee, &user.Role, &user.IsDeleted); err != nil {
 		panic(err)
 	}
-	json.NewEncoder(w).Encode(user)
+	role := GetOneRole(user.Role)
+	employee := GetOneEmployee(user.Employee)
+	userView.IDUser = user.IDUser
+	userView.Login = user.Login
+	userView.Password = user.Password
+	userView.IsDeleted = user.IsDeleted
+	userView.Role = role
+	userView.Employee = employee
+	json.NewEncoder(w).Encode(userView)
 }
 
 func AddUser(w http.ResponseWriter, r *http.Request) {

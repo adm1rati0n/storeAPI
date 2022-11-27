@@ -7,6 +7,6 @@ type Employee struct {
 	EmployeeMiddlename     string `json:"employee_middlename"`
 	EmployeePassportSeries string `json:"employee_passport_series"`
 	EmployeePassportNumber string `json:"employee_passport_number"`
-	EmployeePost           Post   `json:"employee_post"`
+	EmployeePost           int    `json:"employee_post"`
 	IsDeleted              bool   `json:"is_deleted"`
 }
