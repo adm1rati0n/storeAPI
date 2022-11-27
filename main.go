@@ -83,5 +83,11 @@ func main() {
 	r.HandleFunc("/sales/edit/{id}", controllers.UpdateSale).Methods("POST")
 	r.HandleFunc("/sales/{id}", controllers.GetOneSale).Methods("GET")
 	r.HandleFunc("/sales/delete/{id}", controllers.DeleteSale).Methods("GET")
+
+	//Чек
+	r.HandleFunc("/cheque", controllers.GetAllCheques).Methods("GET")
+	r.HandleFunc("/cheque/add", controllers.AddCheque).Methods("POST")
+	r.HandleFunc("/cheque/{id}", controllers.GetOneCheque).Methods("GET")
+	r.HandleFunc("/cheque/delete/{id}", controllers.DeleteCheque).Methods("GET")
 	log.Fatal(http.ListenAndServe("localhost:4000", r))
 }

@@ -52,3 +52,31 @@ func GetProduct(id int) models.Product {
 	}
 	return product
 }
+
+func GetSales(id int) []models.SaleViewModel {
+	db := dbConnection.DB
+	rows, err := db.Query("select * from `sale` where IsDeleted = 0 and Cheque_ID = ?", id)
+	if err != nil {
+		panic(err)
+	}
+	var sales []models.SaleViewModel
+	for rows.Next() {
+		var sale models.Sale
+		var saleView models.SaleViewModel
+		err = rows.Scan(&sale.IDSale, &sale.Amount, &sale.Price,
+			&sale.Product, &sale.Cheque, &sale.IsDeleted)
+		if err != nil {
+			panic(err)
+		}
+
+		saleView.IDSale = sale.IDSale
+		saleView.Amount = sale.Amount
+		saleView.Price = sale.Price
+		saleView.IsDeleted = sale.IsDeleted
+		saleView.Cheque = sale.Cheque
+		saleView.Product = GetProduct(sale.Product)
+
+		sales = append(sales, saleView)
+	}
+	return sales
+}

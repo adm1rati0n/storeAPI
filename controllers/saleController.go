@@ -72,12 +72,12 @@ func AddSale(w http.ResponseWriter, r *http.Request) {
 	amount := r.FormValue("amount")
 	price := r.FormValue("price")
 	productID := r.FormValue("product")
-	supplyID := r.FormValue("cheque")
+	chequeID := r.FormValue("cheque")
 
 	//Валидатор
 
 	query := "call Sale_Insert(?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, amount, price, productID, supplyID)
+	res, err := db.ExecContext(context.Background(), query, amount, price, productID, chequeID)
 	if err != nil {
 		panic(err)
 	}
@@ -96,12 +96,12 @@ func UpdateSale(w http.ResponseWriter, r *http.Request) {
 	amount := r.FormValue("amount")
 	price := r.FormValue("price")
 	productID := r.FormValue("product")
-	supplyID := r.FormValue("cheque")
+	chequeID := r.FormValue("cheque")
 
 	//Валидатор
 
 	query := "call Sale_Update(?,?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, id, amount, price, productID, supplyID)
+	res, err := db.ExecContext(context.Background(), query, id, amount, price, productID, chequeID)
 	if err != nil {
 		panic(err)
 	}
