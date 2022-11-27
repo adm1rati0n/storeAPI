@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type Buh struct {
+type BuhViewModel struct {
 	IDBuh        int       `json:"id_buh"`
 	StartingDate time.Time `json:"starting_date"`
 	EndingDate   time.Time `json:"ending_date"`
@@ -10,6 +10,6 @@ type Buh struct {
 	Expenses     float32   `json:"expenses"`
 	Taxes        float32   `json:"taxes"`
 	Profit       float32   `json:"profit"`
-	Employee     int       `json:"employee"`
+	Employee     Employee  `json:"employee"`
 	IsDeleted    bool      `json:"is_deleted"`
 }

@@ -1,10 +1,10 @@
 package models
 
-type Sale struct {
+type SaleViewModel struct {
 	IDSale    int     `json:"id_sale"`
 	Amount    int     `json:"amount"`
 	Price     float32 `json:"price"`
-	Product   int     `json:"product"`
+	Product   Product `json:"product"`
 	Cheque    int     `json:"cheque"`
 	IsDeleted bool    `json:"is_deleted"`
 }
