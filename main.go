@@ -48,5 +48,12 @@ func main() {
 	r.HandleFunc("/users/edit/{id}", controllers.UpdateUser).Methods("POST")
 	r.HandleFunc("/users/{id}", controllers.GetOneUser).Methods("GET")
 	r.HandleFunc("/users/delete/{id}", controllers.DeleteUser).Methods("GET")
+
+	//Реклама
+	r.HandleFunc("/ads", controllers.GetAllAds).Methods("GET")
+	r.HandleFunc("/ads/add", controllers.AddAd).Methods("POST")
+	r.HandleFunc("/ads/edit/{id}", controllers.UpdateAd).Methods("POST")
+	r.HandleFunc("/ads/{id}", controllers.GetOneAd).Methods("GET")
+	r.HandleFunc("/ads/delete/{id}", controllers.DeleteAd).Methods("GET")
 	log.Fatal(http.ListenAndServe("localhost:4000", r))
 }

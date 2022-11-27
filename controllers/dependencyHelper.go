@@ -19,8 +19,19 @@ func GetOneEmployee(id int) models.Employee {
 	var employee models.Employee
 	if err := db.QueryRow("select * from `employee` where IsDeleted = 0 and ID_Employee = ?", id).Scan(
 		&employee.IDEmployee, &employee.EmployeeSurname, &employee.EmployeeName, &employee.EmployeeMiddlename,
-		&employee.EmployeePassportSeries, &employee.EmployeePassportNumber, &employee.EmployeePost, &employee.IsDeleted); err != nil {
+		&employee.EmployeePassportSeries, &employee.EmployeePassportNumber, &employee.Post, &employee.IsDeleted); err != nil {
 		panic(err)
 	}
 	return employee
+}
+
+func GetAgency(id int) models.Agency {
+	db := dbConnection.DB
+
+	var agency models.Agency
+
+	if err := db.QueryRow("select * from `agency` where IsDeleted = 0 and ID_Agency = ?", id).Scan(&agency.IDAgency, &agency.AgencyName, &agency.IsDeleted); err != nil {
+		panic(err)
+	}
+	return agency
 }

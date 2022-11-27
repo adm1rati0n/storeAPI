@@ -29,18 +29,12 @@ func GetAllAgencies(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetOneAgency(w http.ResponseWriter, r *http.Request) {
-	db := dbConnection.DB
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		panic(err)
 	}
-
-	var agency models.Agency
-
-	if err := db.QueryRow("select * from `agency` where IsDeleted = 0 and ID_Agency = ?", id).Scan(&agency.IDAgency, &agency.AgencyName, &agency.IsDeleted); err != nil {
-		panic(err)
-	}
+	agency := GetAgency(id)
 	json.NewEncoder(w).Encode(agency)
 }
 
