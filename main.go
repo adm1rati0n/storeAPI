@@ -62,5 +62,12 @@ func main() {
 	r.HandleFunc("/buh/edit/{id}", controllers.UpdateBuh).Methods("POST")
 	r.HandleFunc("/buh/{id}", controllers.GetOneBuh).Methods("GET")
 	r.HandleFunc("/buh/delete/{id}", controllers.DeleteBuh).Methods("GET")
+
+	//Сотрудники
+	r.HandleFunc("/employees", controllers.GetAllEmployees).Methods("GET")
+	r.HandleFunc("/employees/add", controllers.AddEmployee).Methods("POST")
+	r.HandleFunc("/employees/edit/{id}", controllers.UpdateEmployee).Methods("POST")
+	r.HandleFunc("/employees/{id}", controllers.GetEmployee).Methods("GET")
+	r.HandleFunc("/employees/delete/{id}", controllers.DeleteEmployee).Methods("GET")
 	log.Fatal(http.ListenAndServe("localhost:4000", r))
 }

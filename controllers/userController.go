@@ -16,7 +16,6 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	//var users []models.User
 	var users []models.UserView
 	for rows.Next() {
 		var user models.User
@@ -33,8 +32,6 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 		userView.IsDeleted = user.IsDeleted
 		userView.Role = role
 		userView.Employee = employee
-
-		//users = append(users, userView)
 
 		users = append(users, userView)
 	}

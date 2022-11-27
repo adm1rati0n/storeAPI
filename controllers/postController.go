@@ -30,18 +30,12 @@ func GetAllPosts(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetOnePost(w http.ResponseWriter, r *http.Request) {
-	db := dbConnection.DB
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		panic(err)
 	}
-
-	var post models.Post
-
-	if err := db.QueryRow("select * from `post` where IsDeleted = 0 and ID_Post = ?", id).Scan(&post.IDPost, &post.PostName, &post.IsDeleted); err != nil {
-		panic(err)
-	}
+	post := GetPost(id)
 	json.NewEncoder(w).Encode(post)
 }
 

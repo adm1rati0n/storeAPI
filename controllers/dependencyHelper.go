@@ -27,11 +27,18 @@ func GetOneEmployee(id int) models.Employee {
 
 func GetAgency(id int) models.Agency {
 	db := dbConnection.DB
-
 	var agency models.Agency
-
 	if err := db.QueryRow("select * from `agency` where IsDeleted = 0 and ID_Agency = ?", id).Scan(&agency.IDAgency, &agency.AgencyName, &agency.IsDeleted); err != nil {
 		panic(err)
 	}
 	return agency
+}
+
+func GetPost(id int) models.Post {
+	db := dbConnection.DB
+	var post models.Post
+	if err := db.QueryRow("select * from `post` where IsDeleted = 0 and ID_Post = ?", id).Scan(&post.IDPost, &post.PostName, &post.IsDeleted); err != nil {
+		panic(err)
+	}
+	return post
 }
