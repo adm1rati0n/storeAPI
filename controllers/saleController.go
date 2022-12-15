@@ -101,7 +101,7 @@ func UpdateSale(w http.ResponseWriter, r *http.Request) {
 	//Валидатор
 
 	query := "call Sale_Update(?,?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, id, amount, price, productID, chequeID)
+	res, err := db.ExecContext(context.Background(), query, amount, price, productID, chequeID, id)
 	if err != nil {
 		panic(err)
 	}

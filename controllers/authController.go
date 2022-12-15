@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"database/sql"
+	"encoding/json"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -34,10 +36,10 @@ func HashPassword(password string) string {
 	return string(bytes)
 }
 
-//func CheckPasswordHash(password, hash string) bool {
-//	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-//	return err == nil
-//}
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
 
 func GenerateJWT() (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
@@ -89,25 +91,23 @@ func GetJWT(w http.ResponseWriter, r *http.Request) {
 }
 
 func SignIn(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func getAllUsers() []models.User {
 	db := dbConnection.DB
-	rows, err := db.Query("select Login, `Password` from `user`")
-	if err != nil {
+	login := r.FormValue("login")
+	password := r.FormValue("password")
+	var user models.User
+	err := db.QueryRow("select * from `user` where IsDeleted = 0 and `Login` = ?", login).Scan(
+		&user.IDUser, &user.Login, &user.Password,
+		&user.Employee, &user.Role, &user.IsDeleted)
+	switch {
+	case err == sql.ErrNoRows:
+		json.NewEncoder(w).Encode("Неправильно введен логин или пароль")
+	case err != nil:
 		panic(err)
-	}
-	defer rows.Close()
-
-	var users []models.User
-	for rows.Next() {
-		var user models.User
-		err = rows.Scan(&user.Login, &user.Password)
-		if err != nil {
-			panic(err)
+	default:
+		if CheckPasswordHash(password, user.Password) {
+			json.NewEncoder(w).Encode(user.Role)
+		} else {
+			json.NewEncoder(w).Encode("Неправильно введен логин или пароль")
 		}
-		users = append(users, user)
 	}
-	return users
 }

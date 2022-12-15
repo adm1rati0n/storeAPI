@@ -8,3 +8,5 @@ require (
 	github.com/gorilla/mux v1.8.0
 	golang.org/x/crypto v0.3.0
 )
+
+require github.com/shopspring/decimal v1.3.1 // indirect

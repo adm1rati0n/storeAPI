@@ -95,5 +95,8 @@ func main() {
 	r.HandleFunc("/supplies/add", controllers.AddSupply).Methods("POST")
 	r.HandleFunc("/supplies/{id}", controllers.GetOneSupply).Methods("GET")
 	r.HandleFunc("/supplies/delete/{id}", controllers.DeleteSupply).Methods("GET")
+
+	//Авторизация
+	r.HandleFunc("/login", controllers.SignIn).Methods("POST")
 	log.Fatal(http.ListenAndServe("localhost:4000", r))
 }

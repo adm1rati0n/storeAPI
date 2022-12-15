@@ -97,7 +97,7 @@ func UpdateAd(w http.ResponseWriter, r *http.Request) {
 	//Валидатор
 
 	query := "call Ad_Update(?,?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, id, date, price, employeeID, agencyID)
+	res, err := db.ExecContext(context.Background(), query, date, price, employeeID, agencyID, id)
 	if err != nil {
 		panic(err)
 	}

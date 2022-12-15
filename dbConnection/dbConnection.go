@@ -9,7 +9,7 @@ import (
 var DB *sql.DB
 
 func DBConnect() {
-	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/store")
+	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/store?parseTime=true")
 	if err != nil {
 		fmt.Println(err.Error())
 		panic(err.Error())

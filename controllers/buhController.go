@@ -102,7 +102,7 @@ func UpdateBuh(w http.ResponseWriter, r *http.Request) {
 	//Валидатор
 
 	query := "call Buh_Update(?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, id, startingDate, endingDate, employeeID)
+	res, err := db.ExecContext(context.Background(), query, startingDate, endingDate, employeeID, id)
 	if err != nil {
 		panic(err)
 	}

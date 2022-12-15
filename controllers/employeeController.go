@@ -110,7 +110,7 @@ func UpdateEmployee(w http.ResponseWriter, r *http.Request) {
 	//Валидатор
 
 	query := "call Employee_Update(?,?,?,?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, id, surname, name, middlename, passportSeries, passportNumber, postID)
+	res, err := db.ExecContext(context.Background(), query, surname, name, middlename, passportSeries, passportNumber, postID, id)
 	if err != nil {
 		panic(err)
 	}

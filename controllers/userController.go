@@ -99,7 +99,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	password = HashPassword(password)
 
 	query := "call User_Update(?,?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, id, login, password, employeeID, roleID)
+	res, err := db.ExecContext(context.Background(), query, login, password, employeeID, roleID, id)
 	if err != nil {
 		panic(err)
 	}

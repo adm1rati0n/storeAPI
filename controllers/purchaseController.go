@@ -101,7 +101,7 @@ func UpdatePurchase(w http.ResponseWriter, r *http.Request) {
 	//Валидатор
 
 	query := "call Purchase_Update(?,?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, id, amount, price, productID, supplyID)
+	res, err := db.ExecContext(context.Background(), query, amount, price, productID, supplyID, id)
 	if err != nil {
 		panic(err)
 	}

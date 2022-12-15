@@ -1,11 +1,14 @@
 package models
 
-import "time"
+import (
+	"github.com/shopspring/decimal"
+	"time"
+)
 
 type Cheque struct {
-	IDCheque   int       `json:"id_cheque"`
-	ChequeDate time.Time `json:"cheque_date"`
-	Total      float32   `json:"total"`
-	Employee   int       `json:"cheque_employee"`
-	IsDeleted  bool      `json:"is_deleted"`
+	IDCheque   int             `json:"id_cheque"`
+	ChequeDate time.Time       `json:"cheque_date"`
+	Total      decimal.Decimal `json:"total"`
+	Employee   int             `json:"cheque_employee"`
+	IsDeleted  bool            `json:"is_deleted"`
 }

@@ -47,7 +47,7 @@ func AddSupplier(w http.ResponseWriter, r *http.Request) {
 
 	//Валидатор
 	query := "call Supplier_Insert(?)"
-	res, err := db.ExecContext(context.Background(), query, supplierName)
+	res, err := db.QueryContext(context.Background(), query, supplierName)
 	if err != nil {
 		panic(err)
 	}
