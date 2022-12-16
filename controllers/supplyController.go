@@ -28,7 +28,7 @@ func GetAllSupplies(w http.ResponseWriter, r *http.Request) {
 
 		supplyView.IDSupply = supply.IDSupply
 		supplyView.SupplyDate = supply.SupplyDate
-		supplyView.Total = supply.SupplyTotal
+		supplyView.SupplyTotal = supply.SupplyTotal
 		supplyView.IsDeleted = supply.IsDeleted
 		supplyView.Supplier = GetSupplier(supply.Supplier)
 		supplyView.Employee = GetOneEmployee(supply.Employee)
@@ -58,7 +58,7 @@ func GetOneSupply(w http.ResponseWriter, r *http.Request) {
 
 	supplyView.IDSupply = supply.IDSupply
 	supplyView.SupplyDate = supply.SupplyDate
-	supplyView.Total = supply.SupplyTotal
+	supplyView.SupplyTotal = supply.SupplyTotal
 	supplyView.IsDeleted = supply.IsDeleted
 	supplyView.Supplier = GetSupplier(supply.Supplier)
 	supplyView.Employee = GetOneEmployee(supply.Employee)
