@@ -65,15 +65,16 @@ func AddAd(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	date := r.FormValue("ad_date")
-	price := r.FormValue("ad_price")
-	employeeID := r.FormValue("employee")
-	agencyID := r.FormValue("agency")
+	var ad models.AdRequest
+	err := json.NewDecoder(r.Body).Decode(&ad)
+	if err != nil {
+		panic(err)
+	}
 
 	//Валидатор
 
 	query := "call Ad_Insert(?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, date, price, employeeID, agencyID)
+	res, err := db.ExecContext(context.Background(), query, &ad.AdDate, &ad.AdPrice, &ad.Employee, &ad.Agency)
 	if err != nil {
 		panic(err)
 	}
@@ -89,15 +90,16 @@ func UpdateAd(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	date := r.FormValue("ad_date")
-	price := r.FormValue("ad_price")
-	employeeID := r.FormValue("employee")
-	agencyID := r.FormValue("agency")
+	var ad models.AdRequest
+	err = json.NewDecoder(r.Body).Decode(&ad)
+	if err != nil {
+		panic(err)
+	}
 
 	//Валидатор
 
 	query := "call Ad_Update(?,?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, date, price, employeeID, agencyID, id)
+	res, err := db.ExecContext(context.Background(), query, &ad.AdDate, &ad.AdPrice, &ad.Employee, &ad.Agency, id)
 	if err != nil {
 		panic(err)
 	}

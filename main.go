@@ -69,6 +69,7 @@ func main() {
 	r.HandleFunc("/employees/edit/{id}", controllers.UpdateEmployee).Methods("POST")
 	r.HandleFunc("/employees/{id}", controllers.GetEmployee).Methods("GET")
 	r.HandleFunc("/employees/delete/{id}", controllers.DeleteEmployee).Methods("GET")
+	r.HandleFunc("/employees/filter/{id}", controllers.GetFilteredEmployees).Methods("GET")
 
 	//Закупка
 	r.HandleFunc("/purchase", controllers.GetAllPurchases).Methods("GET")
@@ -76,6 +77,7 @@ func main() {
 	r.HandleFunc("/purchase/edit/{id}", controllers.UpdatePurchase).Methods("POST")
 	r.HandleFunc("/purchase/{id}", controllers.GetOnePurchase).Methods("GET")
 	r.HandleFunc("/purchase/delete/{id}", controllers.DeletePurchase).Methods("GET")
+	r.HandleFunc("/supplypurchases/{id}", controllers.GetSupplyPurchases).Methods("GET")
 
 	//Продажа
 	r.HandleFunc("/sales", controllers.GetAllSales).Methods("GET")
@@ -83,6 +85,7 @@ func main() {
 	r.HandleFunc("/sales/edit/{id}", controllers.UpdateSale).Methods("POST")
 	r.HandleFunc("/sales/{id}", controllers.GetOneSale).Methods("GET")
 	r.HandleFunc("/sales/delete/{id}", controllers.DeleteSale).Methods("GET")
+	r.HandleFunc("/chequesales/{id}", controllers.GetChequeSales).Methods("GET")
 
 	//Чек
 	r.HandleFunc("/cheque", controllers.GetAllCheques).Methods("GET")
@@ -98,5 +101,9 @@ func main() {
 
 	//Авторизация
 	r.HandleFunc("/login", controllers.SignIn).Methods("POST")
+
+	//Роли
+	r.HandleFunc("/roles", controllers.GetRoles).Methods("GET")
+
 	log.Fatal(http.ListenAndServe("localhost:4000", r))
 }

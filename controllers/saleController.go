@@ -69,20 +69,30 @@ func AddSale(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	amount := r.FormValue("amount")
-	price := r.FormValue("price")
-	productID := r.FormValue("product")
-	chequeID := r.FormValue("cheque")
-
-	//Валидатор
+	var sale models.SaleRequest
+	err := json.NewDecoder(r.Body).Decode(&sale)
+	if err != nil {
+		panic(err)
+	}
 
 	query := "call Sale_Insert(?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, amount, price, productID, chequeID)
+	res, err := db.ExecContext(context.Background(), query, &sale.Amount, &sale.Price, &sale.Product, &sale.Cheque)
 	if err != nil {
 		panic(err)
 	}
 	json.NewEncoder(w).Encode(res)
 }
+
+func GetChequeSales(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		panic(err)
+	}
+	sales := GetSales(id)
+	json.NewEncoder(w).Encode(sales)
+}
+
 func UpdateSale(w http.ResponseWriter, r *http.Request) {
 	db := dbConnection.DB
 	if r.Body == nil {
@@ -93,15 +103,14 @@ func UpdateSale(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	amount := r.FormValue("amount")
-	price := r.FormValue("price")
-	productID := r.FormValue("product")
-	chequeID := r.FormValue("cheque")
-
-	//Валидатор
+	var sale models.SaleRequest
+	err = json.NewDecoder(r.Body).Decode(&sale)
+	if err != nil {
+		panic(err)
+	}
 
 	query := "call Sale_Update(?,?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, amount, price, productID, chequeID, id)
+	res, err := db.ExecContext(context.Background(), query, &sale.Amount, &sale.Price, &sale.Product, &sale.Cheque, id)
 	if err != nil {
 		panic(err)
 	}

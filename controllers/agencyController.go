@@ -43,11 +43,14 @@ func AddAgency(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	agencyName := r.FormValue("agency_name")
+	var agency models.AgencyRequest
+	err := json.NewDecoder(r.Body).Decode(&agency)
+	if err != nil {
+		panic(err)
+	}
 
-	//Валидатор
 	query := "call Agency_Insert(?)"
-	res, err := db.ExecContext(context.Background(), query, agencyName)
+	res, err := db.ExecContext(context.Background(), query, &agency.AgencyName)
 	if err != nil {
 		panic(err)
 	}
@@ -64,12 +67,14 @@ func UpdateAgency(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	agencyName := r.FormValue("agency_name")
-
-	//Валидатор
+	var agency models.AgencyRequest
+	err = json.NewDecoder(r.Body).Decode(&agency)
+	if err != nil {
+		panic(err)
+	}
 
 	query := "call Agency_Update(?,?)"
-	res, err := db.ExecContext(context.Background(), query, id, agencyName)
+	res, err := db.ExecContext(context.Background(), query, id, &agency.AgencyName)
 	if err != nil {
 		panic(err)
 	}

@@ -69,13 +69,14 @@ func AddCheque(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	date := r.FormValue("cheque_date")
-	employeeID := r.FormValue("cheque_employee")
-
-	//Валидатор
+	var cheque models.ChequeRequest
+	err := json.NewDecoder(r.Body).Decode(&cheque)
+	if err != nil {
+		panic(err)
+	}
 
 	query := "call Cheque_Insert(?,?)"
-	res, err := db.ExecContext(context.Background(), query, date, employeeID)
+	res, err := db.ExecContext(context.Background(), query, &cheque.ChequeDate, &cheque.Employee)
 	if err != nil {
 		panic(err)
 	}

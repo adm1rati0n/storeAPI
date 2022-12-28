@@ -10,3 +10,10 @@ type Purchase struct {
 	Supply         int             `json:"supply"`
 	IsDeleted      bool            `json:"is_deleted"`
 }
+
+type PurchaseRequest struct {
+	PurchaseAmount int             `json:"purchase_amount"`
+	PurchasePrice  decimal.Decimal `json:"purchase_price"`
+	Product        int             `json:"product"`
+	Supply         int             `json:"supply"`
+}

@@ -45,11 +45,16 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	productName := r.FormValue("product_name")
+
+	var product models.ProductRequest
+	err := json.NewDecoder(r.Body).Decode(&product)
+	if err != nil {
+		panic(err)
+	}
 
 	//Валидатор
 	query := "call Product_Insert(?)"
-	res, err := db.ExecContext(context.Background(), query, productName)
+	res, err := db.ExecContext(context.Background(), query, &product.ProductName)
 	if err != nil {
 		panic(err)
 	}
@@ -65,12 +70,15 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	productName := r.FormValue("product_name")
 
-	//Валидатор
+	var product models.ProductRequest
+	err = json.NewDecoder(r.Body).Decode(&product)
+	if err != nil {
+		panic(err)
+	}
 
 	query := "call Product_Update(?,?)"
-	res, err := db.ExecContext(context.Background(), query, id, productName)
+	res, err := db.ExecContext(context.Background(), query, id, &product.ProductName)
 	if err != nil {
 		panic(err)
 	}

@@ -5,3 +5,7 @@ type Agency struct {
 	AgencyName string `json:"agency_name"`
 	IsDeleted  bool   `json:"is_deleted"`
 }
+
+type AgencyRequest struct {
+	AgencyName string `json:"agency_name"`
+}

@@ -44,11 +44,15 @@ func AddPost(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	postName := r.FormValue("post_name")
 
-	//Валидатор
+	var post models.PostRequest
+	err := json.NewDecoder(r.Body).Decode(&post)
+	if err != nil {
+		panic(err)
+	}
+
 	query := "call Post_Insert(?)"
-	res, err := db.ExecContext(context.Background(), query, postName)
+	res, err := db.ExecContext(context.Background(), query, &post.PostName)
 	if err != nil {
 		panic(err)
 	}
@@ -64,12 +68,15 @@ func UpdatePost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	postName := r.FormValue("post_name")
 
-	//Валидатор
+	var post models.PostRequest
+	err = json.NewDecoder(r.Body).Decode(&post)
+	if err != nil {
+		panic(err)
+	}
 
 	query := "call Post_Update(?,?)"
-	res, err := db.ExecContext(context.Background(), query, id, postName)
+	res, err := db.ExecContext(context.Background(), query, id, &post.PostName)
 	if err != nil {
 		panic(err)
 	}

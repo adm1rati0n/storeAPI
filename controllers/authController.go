@@ -92,10 +92,13 @@ func GetJWT(w http.ResponseWriter, r *http.Request) {
 
 func SignIn(w http.ResponseWriter, r *http.Request) {
 	db := dbConnection.DB
-	login := r.FormValue("login")
-	password := r.FormValue("password")
+	var auth models.AuthRequest
+	err := json.NewDecoder(r.Body).Decode(&auth)
+	if err != nil {
+		panic(err)
+	}
 	var user models.User
-	err := db.QueryRow("select * from `user` where IsDeleted = 0 and `Login` = ?", login).Scan(
+	err = db.QueryRow("select * from `user` where IsDeleted = 0 and `Login` = ?", &auth.Login).Scan(
 		&user.IDUser, &user.Login, &user.Password,
 		&user.Employee, &user.Role, &user.IsDeleted)
 	switch {
@@ -104,8 +107,8 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 	case err != nil:
 		panic(err)
 	default:
-		if CheckPasswordHash(password, user.Password) {
-			json.NewEncoder(w).Encode(user.Role)
+		if CheckPasswordHash(auth.Password, user.Password) {
+			json.NewEncoder(w).Encode(user)
 		} else {
 			json.NewEncoder(w).Encode("Неправильно введен логин или пароль")
 		}

@@ -72,14 +72,14 @@ func AddBuh(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	startingDate := r.FormValue("starting_date")
-	endingDate := r.FormValue("ending_date")
-	employeeID := r.FormValue("employee")
-
-	//Валидатор
+	var buh models.BuhRequest
+	err := json.NewDecoder(r.Body).Decode(&buh)
+	if err != nil {
+		panic(err)
+	}
 
 	query := "call Buh_Insert(?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, startingDate, endingDate, employeeID)
+	res, err := db.ExecContext(context.Background(), query, &buh.StartingDate, &buh.EndingDate, &buh.Employee)
 	if err != nil {
 		panic(err)
 	}
@@ -95,14 +95,15 @@ func UpdateBuh(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	startingDate := r.FormValue("starting_date")
-	endingDate := r.FormValue("ending_date")
-	employeeID := r.FormValue("employee")
 
-	//Валидатор
+	var buh models.BuhRequest
+	err = json.NewDecoder(r.Body).Decode(&buh)
+	if err != nil {
+		panic(err)
+	}
 
 	query := "call Buh_Update(?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, startingDate, endingDate, employeeID, id)
+	res, err := db.ExecContext(context.Background(), query, &buh.StartingDate, &buh.EndingDate, &buh.Employee, id)
 	if err != nil {
 		panic(err)
 	}

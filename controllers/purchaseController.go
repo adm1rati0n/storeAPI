@@ -64,20 +64,29 @@ func GetOnePurchase(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(purchaseView)
 }
 
+func GetSupplyPurchases(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		panic(err)
+	}
+	purchases := GetPurchases(id)
+	json.NewEncoder(w).Encode(purchases)
+}
+
 func AddPurchase(w http.ResponseWriter, r *http.Request) {
 	db := dbConnection.DB
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	amount := r.FormValue("purchase_amount")
-	price := r.FormValue("purchase_price")
-	productID := r.FormValue("product")
-	supplyID := r.FormValue("supply")
-
-	//Валидатор
+	var purchase models.PurchaseRequest
+	err := json.NewDecoder(r.Body).Decode(&purchase)
+	if err != nil {
+		panic(err)
+	}
 
 	query := "call Purchase_Insert(?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, amount, price, productID, supplyID)
+	res, err := db.ExecContext(context.Background(), query, &purchase.PurchaseAmount, &purchase.PurchasePrice, &purchase.Product, &purchase.Supply)
 	if err != nil {
 		panic(err)
 	}
@@ -93,15 +102,15 @@ func UpdatePurchase(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	amount := r.FormValue("purchase_amount")
-	price := r.FormValue("purchase_price")
-	productID := r.FormValue("product")
-	supplyID := r.FormValue("supply")
 
-	//Валидатор
+	var purchase models.PurchaseRequest
+	err = json.NewDecoder(r.Body).Decode(&purchase)
+	if err != nil {
+		panic(err)
+	}
 
 	query := "call Purchase_Update(?,?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, amount, price, productID, supplyID, id)
+	res, err := db.ExecContext(context.Background(), query, &purchase.PurchaseAmount, &purchase.PurchasePrice, &purchase.Product, &purchase.Supply, id)
 	if err != nil {
 		panic(err)
 	}

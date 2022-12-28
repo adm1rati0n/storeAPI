@@ -5,3 +5,7 @@ type Post struct {
 	PostName  string `json:"post_name"`
 	IsDeleted bool   `json:"is_deleted"`
 }
+
+type PostRequest struct {
+	PostName string `json:"post_name"`
+}

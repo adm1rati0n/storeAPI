@@ -64,16 +64,16 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	login := r.FormValue("login")
-	password := r.FormValue("password")
-	employeeID := r.FormValue("user_employee")
-	roleID := r.FormValue("user_role")
 
-	//Валидатор
+	var user models.UserRequest
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		panic(err)
+	}
 
-	password = HashPassword(password)
+	var password = HashPassword(user.Password)
 	query := "call User_Insert(?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, login, password, employeeID, roleID)
+	res, err := db.ExecContext(context.Background(), query, &user.Login, password, &user.Employee, &user.Role)
 	if err != nil {
 		panic(err)
 	}
@@ -89,17 +89,18 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	login := r.FormValue("login")
-	password := r.FormValue("password")
-	employeeID := r.FormValue("user_employee")
-	roleID := r.FormValue("user_role")
+	var user models.UserRequest
+	err = json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		panic(err)
+	}
 
 	//Валидатор
 
-	password = HashPassword(password)
+	var password = HashPassword(user.Password)
 
 	query := "call User_Update(?,?,?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, login, password, employeeID, roleID, id)
+	res, err := db.ExecContext(context.Background(), query, &user.Login, password, &user.Employee, &user.Role, id)
 	if err != nil {
 		panic(err)
 	}
@@ -119,4 +120,22 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	json.NewEncoder(w).Encode(res)
+}
+
+func GetRoles(w http.ResponseWriter, r *http.Request) {
+	db := dbConnection.DB
+	rows, err := db.Query("select * from `role` where IsDeleted = 0")
+	if err != nil {
+		panic(err)
+	}
+	var roles []models.Role
+	for rows.Next() {
+		var role models.Role
+		err = rows.Scan(&role.IDRole, &role.RoleName, &role.IsDeleted)
+		if err != nil {
+			panic(err)
+		}
+		roles = append(roles, role)
+	}
+	json.NewEncoder(w).Encode(roles)
 }

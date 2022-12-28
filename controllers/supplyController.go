@@ -71,14 +71,14 @@ func AddSupply(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	date := r.FormValue("supply_date")
-	employeeID := r.FormValue("employee")
-	supplierID := r.FormValue("supplier")
-
-	//Валидатор
+	var supply models.SupplyRequest
+	err := json.NewDecoder(r.Body).Decode(&supply)
+	if err != nil {
+		panic(err)
+	}
 
 	query := "call Supply_Insert(?,?,?)"
-	res, err := db.ExecContext(context.Background(), query, date, employeeID, supplierID)
+	res, err := db.ExecContext(context.Background(), query, &supply.SupplyDate, &supply.Employee, &supply.Supplier)
 	if err != nil {
 		panic(err)
 	}

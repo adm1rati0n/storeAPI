@@ -43,11 +43,13 @@ func AddSupplier(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Поля ввода не заполнены")
 	}
-	supplierName := r.FormValue("supplier_name")
-
-	//Валидатор
+	var supplier models.SupplierRequest
+	err := json.NewDecoder(r.Body).Decode(&supplier)
+	if err != nil {
+		panic(err)
+	}
 	query := "call Supplier_Insert(?)"
-	res, err := db.QueryContext(context.Background(), query, supplierName)
+	res, err := db.QueryContext(context.Background(), query, &supplier.SupplierName)
 	if err != nil {
 		panic(err)
 	}
@@ -63,12 +65,13 @@ func UpdateSupplier(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	supplierName := r.FormValue("supplier_name")
-
-	//Валидатор
-
+	var supplier models.SupplierRequest
+	err = json.NewDecoder(r.Body).Decode(&supplier)
+	if err != nil {
+		panic(err)
+	}
 	query := "call Supplier_Update(?,?)"
-	res, err := db.ExecContext(context.Background(), query, id, supplierName)
+	res, err := db.ExecContext(context.Background(), query, id, &supplier.SupplierName)
 	if err != nil {
 		panic(err)
 	}

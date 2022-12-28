@@ -5,3 +5,7 @@ type Product struct {
 	ProductName string `json:"product_name"`
 	IsDeleted   bool   `json:"is_deleted"`
 }
+
+type ProductRequest struct {
+	ProductName string `json:"product_name"`
+}
